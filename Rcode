@@ -1,0 +1,62 @@
+> serie1<-ts(scan("C:\\Users\\Owner\\Desktop\\NoDuraderos.txt"),start=c(1969,1),frequency=4)
+
+> serie1
+      Qtr1  Qtr2  Qtr3  Qtr4
+1969 33742 35401 36147 38067
+1970 34149 36176 37485 39047
+1971 34783 37042 38008 40132
+1972 36466 38680 39976 42273
+1973 39131 40780 41852 43684
+1974 38729 40427 41576 43886
+1975 39131 40394 40956 42959
+1976 38714 40062 41152 43460
+1977 38695 39780 40923 44093
+1978 40777 41778 43160 45897
+1979 41947 44061 44378 47237
+1980 43315 43396 44843 46835
+1981 42833 43548 44637 47107
+1982 42552 43526 45039 47940
+1983 43740 45007 46667 49325
+1984 44878 46234 47055 50318
+1985 46354 47260 48883 52605
+1986 48527 50237 51592 55152
+1987 50451 52294 54633 58802
+1988 53990 55477 57850 61978
+
+> plot(serie1,main="Serie Temporal")
+
+> seriefiltrada<-filter(serie1,c(1/2,rep(1,3),1/2)/4)
+
+> lines(seriefiltrada)
+
+# En el nuevo grafico se observa como la serie filtrada no presenta los movimientos
+# estacionales.
+
+> auto.arima(serie1)
+Series: serie1 
+ARIMA(0,1,0)(0,1,1)[4]                    
+
+Coefficients:
+         sma1
+      -0.5475
+s.e.   0.0974
+
+sigma^2 estimated as 263568:  log likelihood=-575.21
+AIC=1154.42   AICc=1154.59   BIC=1159.06
+
+> result1<-auto.arima(serie1)
+
+> tsdiag(result1)
+
+# En este caso, haciendo uso de la funcion auto.arima, R sugiere un modelo SARIMA
+# de orden (0,1,0) X (0,1,1)[4]. El test de Ljung-Box de p-valores demuestra que la
+# serie es adecuada durante todo el periodo estudiado. 
+
+
+# sma1=-0.5475
+# delta_p(L)=1
+# DELTA_P(L^4 )=1
+# theta_q(L)=1
+# THETA_Q(L^4 )=1-0.5475L^4
+# Obteniéndose la ecuación Z_t=(1-0.5475L^4)e_t=e_t-0.5475e_t-4 (ver documento word
+# adjunto)
